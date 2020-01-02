@@ -1,0 +1,15 @@
+[Unit]
+Description=Ros Master
+After=syslog.target
+After=network.target
+
+[Service]
+Type=simple
+User=kaixinguo
+Group=kaixinguo
+WorkingDirectory=/tmp
+ExecStart=/opt/ros/roscore-daemon.sh
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
