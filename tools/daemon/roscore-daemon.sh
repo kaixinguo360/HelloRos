@@ -1,2 +1,2 @@
 #!/bin/bash
-bash -ic 'roscore'
+bash -ic 'source /opt/ros/kinetic/setup.bash;roscore'
