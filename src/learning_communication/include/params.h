@@ -1,3 +1,6 @@
 #define PUBLISHER "mypublisher"
 #define SUBSCRIBER "mysubscriber"
 #define TOPIC "mytopic"
+#define SERVER "myserver"
+#define CLIENT "myclient"
+#define SERVICE "myservice"

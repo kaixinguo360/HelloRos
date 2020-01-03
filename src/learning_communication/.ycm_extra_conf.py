@@ -6,5 +6,6 @@ def Settings( **kwargs ):
     'flags': [ '-Wall', '-Wextra', '-Werror',
         '-I', '/opt/ros/kinetic/include',
         '-I', base + '/include',
+        '-I', base + '/../../devel/include',
         ],
   }
