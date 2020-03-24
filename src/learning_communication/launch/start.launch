@@ -1,0 +1,15 @@
+<launch>
+  <node
+    pkg="learning_communication"
+    type="publisher"
+    name="mypublisher"
+    required="true"
+  />
+  <node
+    pkg="learning_communication"
+    type="subscriber"
+    name="mysubscriber"
+    respawn="true"
+    output="screen"
+  />
+</launch>
