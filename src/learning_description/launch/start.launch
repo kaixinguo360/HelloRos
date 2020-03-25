@@ -1,7 +1,7 @@
 <launch>
   <arg name="base" default="$(find learning_description)"/>
 
-  <param name="robot_description" textfile="$(arg base)/urdf/arm_description.urdf"/>
+  <param name="robot_description" command="$(find xacro)/xacro --inorder '$(arg base)/urdf/arm_description.urdf.xacro'"/>
   <param name="use_gui" value="true"/>
 
   <!-- rviz节点 -->

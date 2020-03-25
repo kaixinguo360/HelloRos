@@ -1,0 +1,94 @@
+<robot name="arm_body" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:property name="base_radius" value="0.1"/>
+  <xacro:property name="base_height" value="0.01"/>
+
+  <xacro:property name="motor_radius" value="0.01"/>
+  <xacro:property name="motor_height" value="0.02"/>
+
+  <xacro:property name="pole_radius" value="0.01"/>
+  <xacro:property name="pole_length" value="0.2"/>
+
+  <xacro:property name="standoff_x" value="0"/>
+  <xacro:property name="standoff_y" value="0"/>
+  <xacro:property name="standoff_z" value="0"/>
+
+  <xacro:macro name="continuous" params="parent child xyz rpy axis">
+    <joint name="${parent}_${child}_joint" type="continuous">
+      <parent link="${parent}"/>
+      <child link="${child}"/>
+      <origin xyz="${xyz}" rpy="${rpy}"/>
+      <axis xyz="${axis}"/>
+    </joint>
+  </xacro:macro>
+
+  <xacro:macro name="fixed" params="parent child xyz rpy">
+    <joint name="${parent}_${child}_joint" type="fixed">
+      <parent link="${parent}"/>
+      <child link="${child}"/>
+      <origin xyz="${xyz}" rpy="${rpy}"/>
+    </joint>
+  </xacro:macro>
+
+  <xacro:macro name="base" params="name parent xyz rpy">
+    <link name="${name}">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <cylinder length="${base_height}" radius="${base_radius}"/>
+        </geometry>
+        <material name="yellow">
+          <color rgba="1 0.4 0 1"/>
+        </material>
+      </visual>
+    </link>
+    <fixed
+            parent="${parent}"
+            child="${name}"
+            xyz="${xyz}"
+            rpy="${rpy}"
+    />
+  </xacro:macro>
+
+  <xacro:macro name="motor" params="name parent xyz rpy">
+    <link name="${name}">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <cylinder length="${motor_height}" radius="${motor_radius}"/>
+        </geometry>
+        <material name="gray">
+          <color rgba="0.75 0.75 0.75 1"/>
+        </material>
+      </visual>
+    </link>
+    <continuous
+            parent="${parent}"
+            child="${name}"
+            xyz="${xyz}"
+            rpy="${rpy}"
+            axis="0 0 1"
+    />
+  </xacro:macro>
+
+  <xacro:macro name="pole" params="name parent length xyz rpy">
+    <link name="${name}">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <cylinder length="${length}" radius="${pole_radius}"/>
+        </geometry>
+        <material name="white">
+          <color rgba="1 1 1 1"/>
+        </material>
+      </visual>
+    </link>
+    <fixed
+            parent="${parent}"
+            child="${name}"
+            xyz="${xyz}"
+            rpy="${rpy}"
+    />
+  </xacro:macro>
+
+</robot>
