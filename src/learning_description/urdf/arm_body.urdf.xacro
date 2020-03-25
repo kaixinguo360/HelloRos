@@ -19,26 +19,26 @@
           name="motor_L"
           parent="motor_S"
           xyz="${motor_radius + motor_height/2} 0 0"
-          rpy="0 1.5857963 0"
+          rpy="0 ${pi/2} 0"
   />
   <pole
           name="pole_1"
           parent="motor_L"
           length="${pole_length}"
           xyz="0 ${motor_radius + pole_length/2} 0"
-          rpy="1.5857963 0 0"
+          rpy="${pi/2} 0 0"
   />
   <motor
           name="motor_U"
           parent="pole_1"
           xyz="0 0 -${pole_length/2 + motor_radius}"
-          rpy="-1.5857963 0 0"
+          rpy="-${pi/2} 0 0"
   />
   <motor
           name="motor_R"
           parent="motor_U"
           xyz="0 0 ${motor_height/2 + motor_radius}"
-          rpy="-1.5857963 0 0"
+          rpy="-${pi/2} 0 0"
   />
   <pole
           name="pole_2"
@@ -51,13 +51,13 @@
           name="motor_B"
           parent="pole_2"
           xyz="0 0 ${pole_length/2 + motor_radius}"
-          rpy="1.5857963 0 0"
+          rpy="${pi/2} 0 0"
   />
   <motor
           name="motor_T"
           parent="motor_B"
           xyz="0 0 ${motor_height/2 + motor_radius}"
-          rpy="-1.5857963 0 0"
+          rpy="-${pi/2} 0 0"
   />
 
   <link name="wrist_link"/>
