@@ -87,3 +87,47 @@ evince frame.pdf
 rosrun tf static_transform_publisher ...
 ```
 
+```cpp
+using namespace ros;
+using namespace tf;
+
+// TF广播器
+TransformBroadcaster br;
+br.sendTransform(StampedTransform(transform, Time::now(), "parent", "child"));
+
+
+// TF监听器
+TransformListener listener;
+listener.waitForTransform("parent", "child", Time(0), Duration(3.0));
+listener.lookupTransform("parent", "child", Time(0), transform);
+
+// 变换
+Transform transform;
+transform.setOrigin(Vector3(x, y, z)); // 设置位置(X,Y,Z)
+Quaternion q;
+q.setRPY(roll, pitch, yaw); // 设置旋转角度(X,Y,Z)
+transform.setRotation(q);
+```
+
+实用工具
+-------
+
+```bash
+# Qt工具箱
+rqt_console     # 日志输出工具
+rqt_graph       # 计算图可视化工具
+rqt_plot        # 数据绘图工具
+rqt_reconfigure # 参数动态配置工具
+
+# rviz三维可视化平台
+rosrun rviz rviz
+
+# Gazebo仿真环境
+rosrun gazebo_ros gazebo
+
+# rosbag数据记录与回放
+rosbag record -a
+rosbag info <bagfile>
+rosbag play <bagfile>
+```
+

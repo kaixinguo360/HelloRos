@@ -20,8 +20,23 @@
   <node
     pkg="learning_tf"
     type="tf_broadcaster"
-    name="mybroadcaster"
+    name="mybroadcaster1"
     required="true"
     args="/turtle1"
+  />
+  <node
+    pkg="learning_tf"
+    type="tf_broadcaster"
+    name="mybroadcaster2"
+    required="true"
+    args="/turtle2"
+  />
+
+  <!-- TF监听 -->
+  <node
+    pkg="learning_tf"
+    type="tf_listener"
+    name="mylistener"
+    required="true"
   />
 </launch>
