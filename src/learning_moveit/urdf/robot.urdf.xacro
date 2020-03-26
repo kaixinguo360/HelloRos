@@ -1,0 +1,16 @@
+<?xml version="1.0" ?>
+<robot name="arm_robot" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <xacro:include filename="$(find learning_description)/urdf/arm_body.urdf.xacro"/>
+
+    <arm_body/>
+
+    <link name="world"/>
+
+    <joint name="world_joint" type="fixed">
+        <parent link="world"/>
+        <child link = "base_link"/>
+        <origin xyz="0.0 0.0 0.02" rpy="0.0 0.0 0.0"/>
+    </joint>
+
+</robot>

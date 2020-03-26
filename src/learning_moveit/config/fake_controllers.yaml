@@ -1,0 +1,9 @@
+controller_list:
+  - name: fake_arm_controller
+    joints:
+      - motor_S_joint
+      - motor_L_joint
+      - motor_U_joint
+      - motor_R_joint
+      - motor_B_joint
+      - motor_T_joint

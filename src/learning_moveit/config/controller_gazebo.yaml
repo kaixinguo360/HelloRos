@@ -1,0 +1,36 @@
+motor_S_joint_controller:
+  type: position_controllers/JointPositionController
+  joint: motor_S_joint
+  pid:
+    p: 100.0
+    d: 10.0
+motor_L_joint_controller:
+  type: position_controllers/JointPositionController
+  joint: motor_L_joint
+  pid:
+    p: 100.0
+    d: 10.0
+motor_U_joint_controller:
+  type: position_controllers/JointPositionController
+  joint: motor_U_joint
+  pid:
+    p: 100.0
+    d: 10.0
+motor_R_joint_controller:
+  type: position_controllers/JointPositionController
+  joint: motor_R_joint
+  pid:
+    p: 100.0
+    d: 10.0
+motor_B_joint_controller:
+  type: position_controllers/JointPositionController
+  joint: motor_B_joint
+  pid:
+    p: 100.0
+    d: 10.0
+motor_T_joint_controller:
+  type: position_controllers/JointPositionController
+  joint: motor_T_joint
+  pid:
+    p: 100.0
+    d: 10.0

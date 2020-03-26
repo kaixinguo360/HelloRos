@@ -6,17 +6,17 @@
 
   <xacro:property name="base_radius" value="0.01"/>
   <xacro:property name="base_height" value="0.02"/>
-  <xacro:property name="base_mass" value="1"/>
+  <xacro:property name="base_mass" value="10"/>
 
   <xacro:property name="motor_radius" value="0.01"/>
   <xacro:property name="motor_height" value="0.02"/>
-  <xacro:property name="motor_mass" value="1"/>
+  <xacro:property name="motor_mass" value="10"/>
   <xacro:property name="motor_effort" value="150.0"/>
   <xacro:property name="motor_vel" value="${pi}"/>
 
   <xacro:property name="pole_radius" value="0.01"/>
   <xacro:property name="pole_length" value="0.1"/>
-  <xacro:property name="pole_mass" value="5"/>
+  <xacro:property name="pole_mass" value="50"/>
 
   <xacro:property name="standoff_x" value="0"/>
   <xacro:property name="standoff_y" value="0"/>
