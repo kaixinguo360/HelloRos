@@ -5,16 +5,11 @@
     <arg name="urdf_path" value="$(find learning_moveit)/urdf/robot.urdf.xacro"/>
   </include>
 
-  <!-- Gazebo Ros Control管理节点 -->
-  <rosparam file="$(find learning_description)/config/controllers.yaml" command="load"/>
-  <node pkg="controller_manager"
-        type="controller_manager"
-        name="joint_controller_spawner"
-        args="spawn
-            motor_S_joint_controller motor_L_joint_controller motor_U_joint_controller
-            motor_R_joint_controller motor_B_joint_controller motor_T_joint_controller"
-        respawn="false"
-        output="screen"
-  />
+  <!-- controllers of arm_body -->
+  <include file="$(find learning_description)/launch/arm_body_controllers.launch"/>
+  <include file="$(find learning_description)/launch/arm_hand_controllers.launch"/>
+
+  <!-- joint_state_controller -->
+  <include file="$(find learning_description)/launch/joint_state_controller.launch"/>
 
 </launch>

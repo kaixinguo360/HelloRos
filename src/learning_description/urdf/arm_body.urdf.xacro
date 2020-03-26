@@ -5,12 +5,6 @@
   <xacro:macro name="arm_body">
 
     <plugin_ros_control/>
-    <plugin_joint_state_publisher>
-      <jointName>
-        motor_S_joint, motor_L_joint, motor_U_joint,
-        motor_R_joint, motor_B_joint, motor_T_joint
-      </jointName>
-    </plugin_joint_state_publisher>
 
     <link name="base_link"/>
     <base

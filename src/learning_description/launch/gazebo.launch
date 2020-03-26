@@ -1,18 +1,12 @@
 <launch>
-    <arg name="base" default="$(find learning_description)"/>
-    <arg name="world_name" default="$(arg base)/worlds/playground.world"/>
     <arg name="debug" default="false"/>
     <arg name="gui" default="true"/>
     <arg name="paused" default="false"/>
     <arg name="use_sim_time" default="true"/>
     <arg name="headless" default="false"/>
 
-    <param name="robot_description" command="$(find xacro)/xacro --inorder '$(arg base)/urdf/arm_description.urdf.xacro'"/>
-    <param name="use_gui" value="true"/>
-
     <!-- Gazebo节点 -->
     <include file="$(find gazebo_ros)/launch/empty_world.launch">
-        <!--    <arg name="world_name" value="$(arg world_name)"/>-->
         <arg name="debug" value="$(arg debug)"/>
         <arg name="gui" value="$(arg gui)"/>
         <arg name="paused" value="$(arg paused)"/>
@@ -26,33 +20,5 @@
             respawn="false"
             output="screen"
             args="-urdf -model robot -param robot_description"
-    />
-
-    <!-- Gazebo Ros Control管理节点 -->
-    <rosparam file="$(arg base)/config/controllers.yaml" command="load"/>
-    <node pkg="controller_manager"
-          type="controller_manager"
-          name="joint_controller_spawner"
-          args="spawn
-            motor_S_joint_controller motor_L_joint_controller motor_U_joint_controller
-            motor_R_joint_controller motor_B_joint_controller motor_T_joint_controller"
-          respawn="false"
-          output="screen"
-    />
-
-    <!-- rviz节点 -->
-    <node
-            pkg="rviz"
-            type="rviz"
-            name="rviz"
-            required="true"
-            args="-d $(arg base)/config/arm_urdf.rviz"
-    />
-
-    <!-- 监控节点 -->
-    <node
-            pkg="robot_state_publisher"
-            type="state_publisher"
-            name="state_publisher"
     />
 </launch>

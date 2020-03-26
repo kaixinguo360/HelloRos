@@ -4,18 +4,18 @@
   <xacro:property name="pi" value="3.14159265"/>
   <xacro:property name="gap" value="0.0"/>
 
-  <xacro:property name="base_radius" value="0.01"/>
-  <xacro:property name="base_height" value="0.02"/>
+  <xacro:property name="base_radius" value="0.05"/>
+  <xacro:property name="base_height" value="0.1"/>
   <xacro:property name="base_mass" value="10"/>
 
-  <xacro:property name="motor_radius" value="0.01"/>
-  <xacro:property name="motor_height" value="0.02"/>
+  <xacro:property name="motor_radius" value="0.05"/>
+  <xacro:property name="motor_height" value="0.1"/>
   <xacro:property name="motor_mass" value="10"/>
   <xacro:property name="motor_effort" value="150.0"/>
   <xacro:property name="motor_vel" value="${pi}"/>
 
-  <xacro:property name="pole_radius" value="0.01"/>
-  <xacro:property name="pole_length" value="0.1"/>
+  <xacro:property name="pole_radius" value="0.05"/>
+  <xacro:property name="pole_length" value="0.5"/>
   <xacro:property name="pole_mass" value="50"/>
 
   <xacro:property name="standoff_x" value="0"/>
@@ -28,15 +28,6 @@
       <plugin filename="libgazebo_ros_control.so" name="ros_control">
         <robotNamespace>/</robotNamespace>
         <legacyModeNS>true</legacyModeNS>
-      </plugin>
-    </gazebo>
-  </xacro:macro>
-  <xacro:macro name="plugin_joint_state_publisher" params="*jointName">
-    <gazebo>
-      <plugin filename="libgazebo_ros_joint_state_publisher.so" name="joint_state_publisher">
-        <xacro:insert_block name="jointName"/>
-        <updateRate>50</updateRate>
-        <alwaysOn>true</alwaysOn>
       </plugin>
     </gazebo>
   </xacro:macro>

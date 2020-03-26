@@ -70,6 +70,56 @@ Visualization Manager:
           Alpha: 1
           Show Axes: false
           Show Trail: false
+        bh_base_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        bh_finger_11_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        bh_finger_12_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        bh_finger_13_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        bh_finger_21_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        bh_finger_22_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        bh_finger_23_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        bh_finger_31_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        bh_finger_32_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        bh_finger_33_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
         motor_B:
           Alpha: 1
           Show Axes: false
@@ -110,6 +160,10 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
+        world:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
         wrist_link:
           Alpha: 1
           Show Axes: false
@@ -129,6 +183,26 @@ Visualization Manager:
           Value: true
         base_link:
           Value: true
+        bh_base_link:
+          Value: true
+        bh_finger_11_link:
+          Value: true
+        bh_finger_12_link:
+          Value: true
+        bh_finger_13_link:
+          Value: true
+        bh_finger_21_link:
+          Value: true
+        bh_finger_22_link:
+          Value: true
+        bh_finger_23_link:
+          Value: true
+        bh_finger_31_link:
+          Value: true
+        bh_finger_32_link:
+          Value: true
+        bh_finger_33_link:
+          Value: true
         motor_B:
           Value: true
         motor_L:
@@ -145,6 +219,8 @@ Visualization Manager:
           Value: true
         pole_2:
           Value: true
+        world:
+          Value: true
         wrist_link:
           Value: true
       Marker Scale: 0.100000001
@@ -153,18 +229,31 @@ Visualization Manager:
       Show Axes: true
       Show Names: true
       Tree:
-        base_link:
-          base:
-            motor_S:
-              motor_L:
-                pole_1:
-                  motor_U:
-                    motor_R:
-                      pole_2:
-                        motor_B:
-                          motor_T:
-                            wrist_link:
-                              {}
+        world:
+          base_link:
+            base:
+              motor_S:
+                motor_L:
+                  pole_1:
+                    motor_U:
+                      motor_R:
+                        pole_2:
+                          motor_B:
+                            motor_T:
+                              wrist_link:
+                                bh_base_link:
+                                  bh_finger_11_link:
+                                    bh_finger_12_link:
+                                      bh_finger_13_link:
+                                        {}
+                                  bh_finger_21_link:
+                                    bh_finger_22_link:
+                                      bh_finger_23_link:
+                                        {}
+                                  bh_finger_31_link:
+                                    bh_finger_32_link:
+                                      bh_finger_33_link:
+                                        {}
       Update Interval: 0
       Value: true
   Enabled: true
@@ -192,7 +281,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 0.633086562
+      Distance: 2.98639226
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.0599999987
         Stereo Focal Distance: 1
@@ -207,10 +296,10 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.00999999978
-      Pitch: 0.625398636
+      Pitch: 0.435398519
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 1.45038533
+      Yaw: 1.23039782
     Saved: ~
 Window Geometry:
   Displays:
@@ -228,5 +317,5 @@ Window Geometry:
   Views:
     collapsed: false
   Width: 1200
-  X: 56
+  X: 65
   Y: 86

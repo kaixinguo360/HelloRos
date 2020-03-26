@@ -1,6 +1,7 @@
 <?xml version="1.0" ?>
 <robot name="arm_robot" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
+    <!-- arm -->
     <xacro:include filename="$(find learning_description)/urdf/arm_body.urdf.xacro"/>
 
     <arm_body/>

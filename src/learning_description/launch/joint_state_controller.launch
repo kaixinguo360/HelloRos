@@ -1,0 +1,11 @@
+<launch>
+    <!-- joint_state_controller -->
+    <rosparam file="$(find learning_description)/config/joint_state_controller.yaml" command="load"/>
+    <node pkg="controller_manager"
+          type="controller_manager"
+          name="joint_state_controller_spawner"
+          args="spawn joint_state_controller"
+          respawn="false"
+          output="screen"
+    />
+</launch>

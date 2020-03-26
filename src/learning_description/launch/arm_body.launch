@@ -1,0 +1,18 @@
+<launch>
+
+    <param name="robot_description"
+           command="$(find xacro)/xacro --inorder '$(find learning_description)/robots/arm_body_alone_fixed.urdf.xacro'"/>
+
+    <!-- Gazebo节点 -->
+    <include file="$(find learning_description)/launch/gazebo.launch"/>
+
+    <!-- controllers of arm_body -->
+    <include file="$(find learning_description)/launch/arm_body_controllers.launch"/>
+
+    <!-- joint_state_controller -->
+    <include file="$(find learning_description)/launch/joint_state_controller.launch"/>
+
+    <!-- rviz节点 -->
+    <include file="$(find learning_description)/launch/rviz.launch"/>
+
+</launch>

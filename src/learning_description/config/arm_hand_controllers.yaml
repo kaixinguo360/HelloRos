@@ -1,0 +1,19 @@
+finger1_position_controller:
+  type: position_controllers/JointGroupPositionController
+  joints:
+    - bh_j11_joint
+    - bh_j12_joint
+    - bh_j13_joint
+
+finger2_position_controller:
+  type: position_controllers/JointGroupPositionController
+  joints:
+    - bh_j21_joint
+    - bh_j22_joint
+    - bh_j23_joint
+
+finger3_position_controller:
+  type: position_controllers/JointGroupPositionController
+  joints:
+    - bh_j32_joint
+    - bh_j33_joint

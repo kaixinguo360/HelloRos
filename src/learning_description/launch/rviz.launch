@@ -1,0 +1,18 @@
+<launch>
+
+    <!-- rviz节点 -->
+    <node
+            pkg="rviz"
+            type="rviz"
+            name="rviz"
+            required="true"
+            args="-d $(find learning_description)/config/arm_urdf.rviz"
+    />
+
+    <!-- 监控节点 -->
+    <node
+            pkg="robot_state_publisher"
+            type="state_publisher"
+            name="state_publisher"
+    />
+</launch>
