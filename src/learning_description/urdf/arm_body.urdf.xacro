@@ -12,51 +12,51 @@
   <motor
           name="motor_S"
           parent="base"
-          xyz="0 0 ${base_height/2 + motor_height/2}"
+          xyz="0 0 ${base_height/2 + motor_height/2 + gap}"
           rpy="0 0 0"
   />
   <motor
           name="motor_L"
           parent="motor_S"
-          xyz="${motor_radius + motor_height/2} 0 0"
+          xyz="${motor_radius + motor_height/2 + gap} 0 0"
           rpy="0 ${pi/2} 0"
   />
   <pole
           name="pole_1"
           parent="motor_L"
           length="${pole_length}"
-          xyz="0 ${motor_radius + pole_length/2} 0"
+          xyz="0 ${motor_radius + pole_length/2 + gap} 0"
           rpy="${pi/2} 0 0"
   />
   <motor
           name="motor_U"
           parent="pole_1"
-          xyz="0 0 -${pole_length/2 + motor_radius}"
+          xyz="0 0 -${pole_length/2 + motor_radius + gap}"
           rpy="-${pi/2} 0 0"
   />
   <motor
           name="motor_R"
           parent="motor_U"
-          xyz="0 0 ${motor_height/2 + motor_radius}"
+          xyz="0 0 ${motor_height/2 + motor_radius + gap}"
           rpy="-${pi/2} 0 0"
   />
   <pole
           name="pole_2"
           parent="motor_R"
           length="${pole_length}"
-          xyz="0 0 ${motor_height/2 + pole_length/2}"
+          xyz="0 0 ${motor_height/2 + pole_length/2 + gap}"
           rpy="0 0 0"
   />
   <motor
           name="motor_B"
           parent="pole_2"
-          xyz="0 0 ${pole_length/2 + motor_radius}"
+          xyz="0 0 ${pole_length/2 + motor_radius + gap}"
           rpy="${pi/2} 0 0"
   />
   <motor
           name="motor_T"
           parent="motor_B"
-          xyz="0 0 ${motor_height/2 + motor_radius}"
+          xyz="0 0 ${motor_height/2 + motor_radius + gap}"
           rpy="-${pi/2} 0 0"
   />
 
@@ -64,7 +64,7 @@
   <fixed
           parent="motor_T"
           child="wrist_link"
-          xyz="0 0 ${motor_height/2}"
+          xyz="0 0 ${motor_height/2 + gap}"
           rpy="0 0 0"
   />
 

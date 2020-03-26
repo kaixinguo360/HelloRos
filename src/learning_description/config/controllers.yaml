@@ -1,0 +1,62 @@
+/gazebo_ros_control:
+  pid_gains:
+    base_motor_S_joint:
+      p: 100.0
+      d: 10.0
+
+    motor_S_motor_L_joint:
+      p: 100.0
+      d: 10.0
+
+    pole_1_motor_U_joint:
+      p: 100.0
+      d: 10.0
+
+    motor_U_motor_R_joint:
+      p: 100.0
+      d: 10.0
+
+    pole_2_motor_B_joint:
+      p: 100.0
+      d: 10.0
+
+    motor_B_motor_T_joint:
+      p: 100.0
+      d: 10.0
+
+base_motor_S_joint_controller:
+  type: position_controllers/JointPositionController
+  joint: base_motor_S_joint
+  pid:
+    p: 100.0
+    d: 10.0
+motor_S_motor_L_joint_controller:
+  type: position_controllers/JointPositionController
+  joint: motor_S_motor_L_joint
+  pid:
+    p: 100.0
+    d: 10.0
+pole_1_motor_U_joint_controller:
+  type: position_controllers/JointPositionController
+  joint: pole_1_motor_U_joint
+  pid:
+    p: 100.0
+    d: 10.0
+motor_U_motor_R_joint_controller:
+  type: position_controllers/JointPositionController
+  joint: motor_U_motor_R_joint
+  pid:
+    p: 100.0
+    d: 10.0
+pole_2_motor_B_joint_controller:
+  type: position_controllers/JointPositionController
+  joint: pole_2_motor_B_joint
+  pid:
+    p: 100.0
+    d: 10.0
+motor_B_motor_T_joint_controller:
+  type: position_controllers/JointPositionController
+  joint: motor_B_motor_T_joint
+  pid:
+    p: 100.0
+    d: 10.0

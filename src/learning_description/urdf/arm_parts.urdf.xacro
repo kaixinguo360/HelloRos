@@ -1,6 +1,7 @@
 <robot name="arm_body" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
   <xacro:property name="pi" value="3.14159265"/>
+  <xacro:property name="gap" value="0.001"/>
 
   <xacro:property name="base_radius" value="0.1"/>
   <xacro:property name="base_height" value="0.01"/>
@@ -8,15 +9,22 @@
 
   <xacro:property name="motor_radius" value="0.01"/>
   <xacro:property name="motor_height" value="0.02"/>
-  <xacro:property name="motor_mass" value="0.1"/>
+  <xacro:property name="motor_mass" value="1"/>
 
   <xacro:property name="pole_radius" value="0.01"/>
   <xacro:property name="pole_length" value="0.2"/>
-  <xacro:property name="pole_mass" value="0.2"/>
+  <xacro:property name="pole_mass" value="2"/>
 
   <xacro:property name="standoff_x" value="0"/>
   <xacro:property name="standoff_y" value="0"/>
   <xacro:property name="standoff_z" value="0"/>
+
+  <gazebo>
+    <plugin filename="libgazebo_ros_control.so" name="ros_control">
+      <robotNamespace>/</robotNamespace>
+      <legacyModeNS>true</legacyModeNS>
+    </plugin>
+  </gazebo>
 
   <xacro:macro name="cylinder_inertial" params="radius length mass">
     <inertial>
@@ -37,9 +45,11 @@
     </joint>
     <transmission name="${parent}_${child}_joint_trans">
       <type>transmission_interface/SimpleTransmission</type>
-      <joint name="${parent}_${child}_joint"/>
+      <joint name="${parent}_${child}_joint">
+        <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+      </joint>
       <actuator name="${parent}_${child}_joint_motor">
-        <hardwareInterface>VelocityJointInterface</hardwareInterface>
+        <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
         <mechanicalReduction>1</mechanicalReduction>
       </actuator>
     </transmission>
