@@ -2,70 +2,83 @@
 
   <xacro:include filename="$(find learning_description)/urdf/arm_parts.urdf.xacro"/>
 
-  <link name="base_link"/>
-  <base
-          name="base"
-          parent="base_link"
-          xyz="${standoff_x} ${standoff_y} ${standoff_z + base_height/2}"
-          rpy="0 0 0"
-  />
-  <motor
-          name="motor_S"
-          parent="base"
-          xyz="0 0 ${base_height/2 + motor_height/2 + gap}"
-          rpy="0 0 0"
-  />
-  <motor
-          name="motor_L"
-          parent="motor_S"
-          xyz="${motor_radius + motor_height/2 + gap} 0 0"
-          rpy="0 ${pi/2} 0"
-  />
-  <pole
-          name="pole_1"
-          parent="motor_L"
-          length="${pole_length}"
-          xyz="0 ${motor_radius + pole_length/2 + gap} 0"
-          rpy="${pi/2} 0 0"
-  />
-  <motor
-          name="motor_U"
-          parent="pole_1"
-          xyz="0 0 -${pole_length/2 + motor_radius + gap}"
-          rpy="-${pi/2} 0 0"
-  />
-  <motor
-          name="motor_R"
-          parent="motor_U"
-          xyz="0 0 ${motor_height/2 + motor_radius + gap}"
-          rpy="-${pi/2} 0 0"
-  />
-  <pole
-          name="pole_2"
-          parent="motor_R"
-          length="${pole_length}"
-          xyz="0 0 ${motor_height/2 + pole_length/2 + gap}"
-          rpy="0 0 0"
-  />
-  <motor
-          name="motor_B"
-          parent="pole_2"
-          xyz="0 0 ${pole_length/2 + motor_radius + gap}"
-          rpy="${pi/2} 0 0"
-  />
-  <motor
-          name="motor_T"
-          parent="motor_B"
-          xyz="0 0 ${motor_height/2 + motor_radius + gap}"
-          rpy="-${pi/2} 0 0"
-  />
+  <xacro:macro name="arm_body">
 
-  <link name="wrist_link"/>
-  <fixed
-          parent="motor_T"
-          child="wrist_link"
-          xyz="0 0 ${motor_height/2 + gap}"
-          rpy="0 0 0"
-  />
+    <plugin_ros_control/>
+    <plugin_joint_state_publisher>
+      <jointName>
+        motor_S_joint, motor_L_joint, motor_U_joint,
+        motor_R_joint, motor_B_joint, motor_T_joint
+      </jointName>
+    </plugin_joint_state_publisher>
+
+    <link name="base_link"/>
+    <base
+            name="base"
+            parent="base_link"
+            xyz="${standoff_x} ${standoff_y} ${standoff_z + base_height/2 + gap}"
+            rpy="0 0 0"
+    />
+    <motor
+            name="motor_S"
+            parent="base"
+            xyz="0 0 ${base_height/2 + motor_height/2 + gap}"
+            rpy="0 0 0"
+    />
+    <motor
+            name="motor_L"
+            parent="motor_S"
+            xyz="${motor_radius + motor_height/2 + gap} 0 0"
+            rpy="0 ${pi/2} 0"
+    />
+    <pole
+            name="pole_1"
+            parent="motor_L"
+            length="${pole_length}"
+            xyz="0 ${motor_radius + pole_length/2 + gap} 0"
+            rpy="${pi/2} 0 0"
+    />
+    <motor
+            name="motor_U"
+            parent="pole_1"
+            xyz="0 0 -${pole_length/2 + motor_radius + gap}"
+            rpy="-${pi/2} 0 0"
+    />
+    <motor
+            name="motor_R"
+            parent="motor_U"
+            xyz="0 0 ${motor_height/2 + motor_radius + gap}"
+            rpy="-${pi/2} 0 0"
+    />
+    <pole
+            name="pole_2"
+            parent="motor_R"
+            length="${pole_length}"
+            xyz="0 0 ${motor_height/2 + pole_length/2 + gap}"
+            rpy="0 0 0"
+    />
+    <motor
+            name="motor_B"
+            parent="pole_2"
+            xyz="0 0 ${pole_length/2 + motor_radius + gap}"
+            rpy="${pi/2} 0 0"
+    />
+    <motor
+            name="motor_T"
+            parent="motor_B"
+            xyz="0 0 ${motor_height/2 + motor_radius + gap}"
+            rpy="-${pi/2} 0 0"
+    />
+
+    <link name="wrist_link"/>
+    <fixed
+            name="wrist_joint"
+            parent="motor_T"
+            child="wrist_link"
+            xyz="0 0 ${motor_height/2 + gap}"
+            rpy="0 0 0"
+    />
+
+  </xacro:macro>
 
 </robot>
