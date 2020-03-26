@@ -15,6 +15,10 @@ hardware_interface:
     - motor_R_joint
     - motor_B_joint
     - motor_T_joint
+    - bh_j11_joint
+    - bh_j12_joint
+    - bh_j22_joint
+    - bh_j32_joint
   sim_control_mode: 1  # 0: position, 1: velocity
 # Publish all joint states
 # Creates the /joint_states topic necessary in ROS
@@ -24,6 +28,7 @@ joint_state_controller:
 controller_list:
   - name: arm_controller
     action_ns: follow_joint_trajectory
+    default: True
     type: FollowJointTrajectory
     joints:
       - motor_S_joint
@@ -32,6 +37,16 @@ controller_list:
       - motor_R_joint
       - motor_B_joint
       - motor_T_joint
+  - name: hand_controller
+    action_ns: follow_joint_trajectory
+    default: True
+    type: FollowJointTrajectory
+    joints:
+      - bh_j11_joint
+      - bh_j12_joint
+      - bh_j22_joint
+      - bh_j32_joint
+
 arm_controller:
   type: position_controllers/JointTrajectoryController
   joints:

@@ -5,8 +5,7 @@
     <arg name="urdf_path" value="$(find learning_moveit)/urdf/robot.urdf.xacro"/>
   </include>
 
-  <!-- controllers of arm_body -->
-  <include file="$(find learning_description)/launch/arm_body_controllers.launch"/>
+  <!-- controllers of arm_hand -->
   <include file="$(find learning_description)/launch/arm_hand_controllers.launch"/>
 
   <!-- joint_state_controller -->
