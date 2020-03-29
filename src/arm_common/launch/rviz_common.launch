@@ -1,0 +1,9 @@
+<launch>
+    <arg name="rviz" default="true"/>
+    <arg name="robot_state_publisher" default="true"/>
+    <arg name="joint_state_publisher" default="true"/>
+
+    <include if="$(arg rviz)" file="$(find arm_common)/launch/rviz.launch"/>
+    <include if="$(arg robot_state_publisher)" file="$(find arm_common)/launch/robot_state_publisher.launch"/>
+    <include if="$(arg joint_state_publisher)" file="$(find arm_common)/launch/joint_state_publisher.launch"/>
+</launch>

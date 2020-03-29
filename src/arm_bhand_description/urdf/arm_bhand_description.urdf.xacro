@@ -1,0 +1,18 @@
+<robot name="arm_bhand" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:include filename="$(find arm_description)/urdf/arm_description.urdf.xacro"/>
+
+  <!-- barrett hand -->
+  <xacro:include filename="$(find barrett_hand_description)/urdf/bh282.urdf.xacro" />
+
+  <xacro:macro name="arm_bhand">
+
+    <arm/>
+
+    <!-- end effector -->
+    <xacro:bhand_macro parent="wrist_link" name="bh">
+      <origin xyz="0.0 0.0 0.0" rpy="0 0 ${pi/2.0}"/>
+    </xacro:bhand_macro>
+  </xacro:macro>
+
+</robot>

@@ -1,0 +1,7 @@
+<launch>
+    <!-- Setting and publishing joint state values for a given URDF. -->
+    <node pkg="joint_state_publisher_gui"
+          type="joint_state_publisher_gui"
+          name="joint_state_publisher"
+    />
+</launch>

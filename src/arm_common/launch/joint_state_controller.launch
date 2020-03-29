@@ -1,0 +1,11 @@
+<launch>
+    <!-- Controller to publish joint state. -->
+    <rosparam file="$(find arm_common)/config/joint_state_controller_config.yaml" command="load"/>
+    <node pkg="controller_manager"
+          type="controller_manager"
+          name="joint_state_controller_spawner"
+          args="spawn joint_state_controller"
+          respawn="false"
+          output="screen"
+    />
+</launch>

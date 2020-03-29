@@ -1,0 +1,10 @@
+<launch>
+    <!-- rviz节点 -->
+    <node
+            pkg="rviz"
+            type="rviz"
+            name="rviz"
+            required="true"
+            args="-d $(find arm_common)/config/rviz_config.rviz"
+    />
+</launch>

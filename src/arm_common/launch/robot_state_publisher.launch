@@ -1,0 +1,8 @@
+<launch>
+    <!-- Publish the state of robot to tf. -->
+    <node
+            pkg="robot_state_publisher"
+            type="robot_state_publisher"
+            name="robot_state_publisher"
+    />
+</launch>

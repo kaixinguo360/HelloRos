@@ -1,0 +1,12 @@
+<launch>
+
+    <param name="robot_description"
+           command="$(find xacro)/xacro --inorder '$(find arm_description)/robots/arm_fixed.urdf.xacro'"/>
+
+    <!-- controllers of robot -->
+    <include file="$(find arm_description)/launch/arm_controllers.launch"/>
+
+    <!-- common launch files -->
+    <include file="$(find arm_common)/launch/gazebo_common.launch"/>
+
+</launch>

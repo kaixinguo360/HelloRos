@@ -1,0 +1,11 @@
+<launch>
+    <arg name="gazebo" default="true"/>
+    <arg name="rviz" default="true"/>
+    <arg name="robot_state_publisher" default="true"/>
+    <arg name="joint_state_controller" default="true"/>
+
+    <include if="$(arg gazebo)" file="$(find arm_common)/launch/gazebo.launch"/>
+    <include if="$(arg rviz)" file="$(find arm_common)/launch/rviz.launch"/>
+    <include if="$(arg robot_state_publisher)" file="$(find arm_common)/launch/robot_state_publisher.launch"/>
+    <include if="$(arg joint_state_controller)" file="$(find arm_common)/launch/joint_state_controller.launch"/>
+</launch>

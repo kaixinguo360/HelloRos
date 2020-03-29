@@ -1,0 +1,14 @@
+<launch>
+    <!-- controllers of arm_body -->
+    <rosparam file="$(find arm_bhand_description)/config/bhand_controllers.yaml" command="load"/>
+    <node pkg="controller_manager"
+          type="controller_manager"
+          name="arm_hand_joint_controller_spawner"
+          args="spawn
+            finger1_position_controller
+            finger2_position_controller
+            finger3_position_controller"
+          respawn="false"
+          output="screen"
+    />
+</launch>

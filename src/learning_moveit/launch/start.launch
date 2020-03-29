@@ -6,9 +6,9 @@
   </include>
 
   <!-- controllers of arm_hand -->
-  <include file="$(find learning_description)/launch/arm_hand_controllers.launch"/>
+  <include file="$(find arm_description)/launch/arm_hand_controllers.launch"/>
 
   <!-- joint_state_controller -->
-  <include file="$(find learning_description)/launch/joint_state_controller.launch"/>
+  <include file="$(find arm_description)/launch/joint_state_controller.launch"/>
 
 </launch>
