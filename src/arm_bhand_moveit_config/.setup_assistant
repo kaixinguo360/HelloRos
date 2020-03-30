@@ -1,0 +1,11 @@
+moveit_setup_assistant_config:
+  URDF:
+    package: arm_bhand_description
+    relative_path: robots/arm_bhand_fixed.urdf.xacro
+    xacro_args: "--inorder "
+  SRDF:
+    relative_path: config/arm_robot.srdf
+  CONFIG:
+    author_name: Kaixinguo
+    author_email: kaixinguo@kaixinguo.site
+    generated_timestamp: 1585532962

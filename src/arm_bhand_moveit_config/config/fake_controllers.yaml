@@ -1,0 +1,15 @@
+controller_list:
+  - name: fake_arm_controller
+    joints:
+      - motor_S_joint
+      - motor_L_joint
+      - motor_U_joint
+      - motor_R_joint
+      - motor_B_joint
+      - motor_T_joint
+  - name: fake_hand_controller
+    joints:
+      - bh_j11_joint
+      - bh_j12_joint
+      - bh_j22_joint
+      - bh_j32_joint
