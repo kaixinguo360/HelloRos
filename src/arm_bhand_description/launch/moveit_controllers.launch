@@ -1,11 +1,11 @@
 <launch>
     <!-- controllers of robot -->
-    <rosparam file="$(find arm_gazebo)/config/ros_controllers.yaml" command="load"/>
+    <rosparam file="$(find arm_bhand_description)/config/moveit_controllers.yaml" command="load"/>
     <node
             pkg="controller_manager"
             type="spawner"
             name="ros_controllers_spawner"
-            args="arm_controller"
+            args="arm_controller hand_controller"
             respawn="false"
             output="screen"
     />

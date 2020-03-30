@@ -113,7 +113,7 @@
         <geometry>
           <cylinder length="${motor_height}" radius="${motor_radius}"/>
         </geometry>
-        <material name="gray">
+        <material name="grey">
           <color rgba="0.75 0.75 0.75 1"/>
         </material>
       </visual>
@@ -137,7 +137,7 @@
             axis="0 0 1"
     />
     <gazebo reference="${name}">
-      <material>Gazebo/Gray</material>
+      <material>Gazebo/Grey</material>
     </gazebo>
   </xacro:macro>
   <xacro:macro name="pole" params="name parent length xyz rpy">

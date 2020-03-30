@@ -1,14 +1,15 @@
 <launch>
 
-  <!-- If database loading was enabled, start mongodb as well -->
-  <include file="$(find learning_moveit)/launch/demo_gazebo.launch">
-    <arg name="urdf_path" value="$(find learning_moveit)/urdf/robot.urdf.xacro"/>
+  <param name="robot_description"
+         command="$(find xacro)/xacro --inorder '$(find arm_bhand_description)/robots/arm_bhand_fixed.urdf.xacro'"/>
+
+  <!-- Load the controllers -->
+  <include file="$(find arm_bhand_description)/launch/moveit_controllers.launch"/>
+
+  <!-- common launch files -->
+  <include file="$(find arm_common)/launch/moveit_common.launch">
+    <arg name="moveit_config" value="$(find arm_bhand_moveit_config)"/>
+    <arg name="rviz" value="false"/>
   </include>
-
-  <!-- controllers of arm_hand -->
-  <include file="$(find arm_description)/launch/arm_hand_controllers.launch"/>
-
-  <!-- joint_state_controller -->
-  <include file="$(find arm_description)/launch/joint_state_controller.launch"/>
 
 </launch>

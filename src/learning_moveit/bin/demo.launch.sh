@@ -2,4 +2,4 @@
 
 source $(dirname $(realpath $0))/../../../devel/setup.bash
 
-/opt/ros/kinetic/bin/roslaunch arm_bhand_gazebo start.launch
+/opt/ros/kinetic/bin/roslaunch learning_moveit demo.launch
