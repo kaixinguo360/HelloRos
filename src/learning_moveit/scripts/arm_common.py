@@ -3,10 +3,8 @@
 import moveit_commander
 import rospy
 import sys
-from PyKDL import *
-
+from PyKDL import Frame, Vector, Rotation
 from geometry_msgs.msg import PoseStamped, Point, Quaternion, Pose
-from moveit_msgs.msg import RobotTrajectory
 
 
 class Arm:
@@ -39,20 +37,17 @@ class Arm:
 
     # ---- utils ---- #
 
-    def go(self):
-        self.cmd.go(wait=self.wait)
-
-    def goto_named_target(self, name):
-        self.cmd.set_named_target(name)
-        self.go()
-
     def get_transform(self):
         pose = self.cmd.get_current_pose(self.end_link).pose
         return pose_to_frame(pose)
 
-    # ---- transform ---- #
+    # ---- absolute transform ---- #
 
-    def set_to_transform(self, transform):
+    def to_target(self, name):
+        self.cmd.set_named_target(name)
+        self.cmd.go(wait=self.wait)
+
+    def to_transform(self, transform):
         pose = None
         if isinstance(transform, Frame):
             pose = frame_to_pose(transform)
@@ -62,18 +57,34 @@ class Arm:
         self.cmd.set_pose_target(pose, self.end_link)
         plan = self.cmd.plan()
         self.cmd.execute(plan)
-    def transform(self, transform):
-        self.set_to_transform(self.get_transform() * transform)
 
-    def set_to_translate(self, x=0, y=0, z=0):
-        self.set_to_transform(Frame(Vector(x, y, z)))
-    def translate(self, x=0, y=0, z=0):
-        self.transform(Frame(Vector(x, y, z)))
+    def to_translate(self, xyz):
+        cur = self.get_transform()
+        cur.p = Vector(xyz[0], xyz[1], xyz[2])
+        self.to_transform(cur)
 
-    def set_to_rotate(self, axis_x=0, axis_y=0, axis_z=0):
-        self.set_to_transform(Frame(Rotation.RPY(axis_x, axis_y, axis_z)))
-    def rotate(self, axis_x=0, axis_y=0, axis_z=0):
-        self.transform(Frame(Rotation.RPY(axis_x, axis_y, axis_z)))
+    def to_rotate(self, rpy):
+        cur = self.get_transform()
+        cur.M = Rotation.RPY(rpy[0], rpy[1], rpy[2])
+        self.to_transform(cur)
+
+    # ---- local transform ---- #
+
+    def local_transform(self, transform):
+        self.to_transform(self.get_transform() * transform)
+    def local_translate(self, xyz):
+        self.local_transform(Frame(Vector(xyz[0], xyz[1], xyz[2])))
+    def local_rotate(self, rpy):
+        self.local_transform(Frame(Rotation.RPY(rpy[0], rpy[1], rpy[2])))
+
+    # ---- global transform ---- #
+
+    def global_transform(self, transform):
+        self.to_transform(transform * self.get_transform())
+    def global_translate(self, xyz):
+        self.global_transform(Frame(Vector(xyz[0], xyz[1], xyz[2])))
+    def global_rotate(self, rpy):
+        self.global_transform(Frame(Rotation.RPY(rpy[0], rpy[1], rpy[2])))
 
 
 def frame_to_pose(frame):
