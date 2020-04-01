@@ -3,14 +3,16 @@
 import moveit_commander
 import rospy
 import sys
+
 from PyKDL import Frame, Vector, Rotation
-from geometry_msgs.msg import PoseStamped, Point, Quaternion, Pose
+from geometry_msgs.msg import PoseStamped, Pose, Point, Quaternion
 
 
 class Arm:
     cmd = ''
     end_link = ''
     wait = True
+    cartesian = False
 
     def __init__(self, node, arm='arm', ref_frame='base_link'):
         # 等待MoveIt服务上线
@@ -37,9 +39,17 @@ class Arm:
 
     # ---- utils ---- #
 
+    def get_pose(self):
+        return self.cmd.get_current_pose(self.end_link).pose
+
     def get_transform(self):
-        pose = self.cmd.get_current_pose(self.end_link).pose
-        return pose_to_frame(pose)
+        return pose_to_frame(self.get_pose())
+
+    def get_translation(self):
+        return self.get_transform().p
+
+    def get_rotation(self):
+        return self.get_transform().M
 
     # ---- absolute transform ---- #
 
@@ -47,44 +57,81 @@ class Arm:
         self.cmd.set_named_target(name)
         self.cmd.go(wait=self.wait)
 
-    def to_transform(self, transform):
+    def to_transform(self, xyz, rpy=None, cartesian=None):
         pose = None
-        if isinstance(transform, Frame):
-            pose = frame_to_pose(transform)
-        elif isinstance(transform, Pose):
-            pose = transform
-        self.cmd.set_start_state_to_current_state()
-        self.cmd.set_pose_target(pose, self.end_link)
-        plan = self.cmd.plan()
-        self.cmd.execute(plan)
 
-    def to_translate(self, xyz):
+        if isinstance(xyz, Frame):
+            pose = frame_to_pose(xyz)
+        elif isinstance(xyz, Pose):
+            pose = xyz
+        elif isinstance(xyz, tuple) and isinstance(rpy, tuple):
+            pos = Vector(xyz[0], xyz[1], xyz[2])
+            rot = Rotation.RPY(rpy[0], rpy[1], rpy[2])
+            pose = frame_to_pose(Frame(rot, pos))
+
+        if cartesian is None:
+            cartesian = self.cartesian
+
+        self.cmd.set_start_state_to_current_state()
+        if cartesian:
+            way_points = [self.get_pose(), pose]
+            fraction = 0.0      # 路径规划覆盖率
+            max_tries = 100     # 最大尝试次数
+            attempts = 0        # 已经尝试次数
+            while fraction < 1.0 and attempts < max_tries:
+                (plan, fraction) = self.cmd.compute_cartesian_path(
+                    way_points,     # 路点列表
+                    0.001,          # 步进值
+                    0.0,            # 跳跃阈值
+                    True            # 避障规划
+                )
+                attempts += 1
+                # if attempts % 10 == 0:
+                #     rospy.loginfo("Still trying after " +
+                #                   str(attempts) + " attempts... (" +
+                #                   str(fraction) + ")")
+            if fraction == 1.0:
+                # rospy.loginfo("Path computed successfully. Moving the arm.")
+                self.cmd.execute(plan)
+                # rospy.loginfo("Path execution")
+            else:
+                rospy.loginfo("Path planning failed with only " +
+                              str(fraction) + " success after " +
+                              str(max_tries) + " attempts. Give up Cartesian mode.")
+                cartesian = False
+
+        if not cartesian:
+            self.cmd.set_pose_target(pose, self.end_link)
+            plan = self.cmd.plan()
+            self.cmd.execute(plan)
+
+    def to_translate(self, xyz, cartesian=None):
         cur = self.get_transform()
         cur.p = Vector(xyz[0], xyz[1], xyz[2])
-        self.to_transform(cur)
+        self.to_transform(cur, cartesian=cartesian)
 
-    def to_rotate(self, rpy):
+    def to_rotate(self, rpy, cartesian=None):
         cur = self.get_transform()
         cur.M = Rotation.RPY(rpy[0], rpy[1], rpy[2])
-        self.to_transform(cur)
+        self.to_transform(cur, cartesian=cartesian)
 
     # ---- local transform ---- #
 
-    def local_transform(self, transform):
-        self.to_transform(self.get_transform() * transform)
-    def local_translate(self, xyz):
-        self.local_transform(Frame(Vector(xyz[0], xyz[1], xyz[2])))
-    def local_rotate(self, rpy):
-        self.local_transform(Frame(Rotation.RPY(rpy[0], rpy[1], rpy[2])))
+    def local_transform(self, transform, cartesian=None):
+        self.to_transform(self.get_transform() * transform, cartesian=cartesian)
+    def local_translate(self, xyz, cartesian=None):
+        self.local_transform(Frame(Vector(xyz[0], xyz[1], xyz[2])), cartesian=cartesian)
+    def local_rotate(self, rpy, cartesian=None):
+        self.local_transform(Frame(Rotation.RPY(rpy[0], rpy[1], rpy[2])), cartesian=cartesian)
 
     # ---- global transform ---- #
 
-    def global_transform(self, transform):
-        self.to_transform(transform * self.get_transform())
-    def global_translate(self, xyz):
-        self.global_transform(Frame(Vector(xyz[0], xyz[1], xyz[2])))
-    def global_rotate(self, rpy):
-        self.global_transform(Frame(Rotation.RPY(rpy[0], rpy[1], rpy[2])))
+    def global_transform(self, transform, cartesian=None):
+        self.to_transform(transform * self.get_transform(), cartesian=cartesian)
+    def global_translate(self, xyz, cartesian=None):
+        self.global_transform(Frame(Vector(xyz[0], xyz[1], xyz[2])), cartesian=cartesian)
+    def global_rotate(self, rpy, cartesian=None):
+        self.global_transform(Frame(Rotation.RPY(rpy[0], rpy[1], rpy[2])), cartesian=cartesian)
 
 
 def frame_to_pose(frame):
