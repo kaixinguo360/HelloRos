@@ -92,7 +92,7 @@ class Arm:
             pose = frame_to_pose(xyz)
         elif isinstance(xyz, Pose):
             pose = xyz
-        elif isinstance(xyz, tuple) and isinstance(rpy, tuple):
+        elif (isinstance(xyz, tuple) or isinstance(xyz, list)) and (isinstance(rpy, tuple) or isinstance(rpy, list)):
             pos = Vector(xyz[0], xyz[1], xyz[2])
             rot = Rotation.RPY(rpy[0], rpy[1], rpy[2])
             pose = frame_to_pose(Frame(rot, pos))

@@ -26,7 +26,7 @@ class Scene:
     def destroy(self):
         pass
 
-    # ---- add object ---- #
+    # ---- add & remove ---- #
 
     def add_box(self, name, size, transform, rgba=None):
         if rgba is None:
@@ -43,6 +43,10 @@ class Scene:
 
         self.set_color(name, rgba)
         self.send_colors()
+
+    def remove_object(self, name):
+        self.interface.remove_world_object(name)
+        self.wait_state_update(name, is_known=False)
 
     # ---- utils ---- #
 
@@ -74,12 +78,12 @@ class Scene:
             cur_is_known = name in self.interface.get_known_object_names()
 
             if (cur_is_attached == is_attached) and (cur_is_known == is_known):
-                rospy.loginfo('Adding box to scene success.')
+                rospy.loginfo('Scene update succeeded.')
                 return True
 
             rospy.sleep(0.1)
             current = rospy.get_time()
             # rospy.loginfo("Wait scene update [" + str(current - start) + "s]...")
 
-        rospy.loginfo('Adding box to scene failed')
+        rospy.loginfo('Scene update failed')
         return False

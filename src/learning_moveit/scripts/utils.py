@@ -7,6 +7,8 @@ import moveit_commander
 from PyKDL import Frame, Vector, Rotation
 from geometry_msgs.msg import PoseStamped, Pose, Point, Quaternion
 
+pi = 3.1415926
+
 
 def init(node_name):
     # 等待MoveIt服务上线
