@@ -9,7 +9,7 @@
   <!-- common launch files -->
   <include file="$(find arm_common)/launch/moveit_common.launch">
     <arg name="moveit_config" value="$(find arm_bhand_moveit_config)"/>
-    <arg name="rviz" value="false"/>
+    <arg name="rviz" value="true"/>
   </include>
 
 </launch>

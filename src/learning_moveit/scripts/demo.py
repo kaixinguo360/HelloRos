@@ -1,6 +1,9 @@
 #!/usr/bin/python2
 # coding=utf-8
-from arm_common import *
+import rospy
+from arm import Arm
+from scene import Scene
+from utils import *
 
 
 def global_test():
@@ -25,9 +28,40 @@ def local_test():
         arm.local_rotate((3.1415926, 0, 0))
 
 
-arm = Arm('moveit_ik_demo')
-arm.cartesian = True
+brick_size=(0.4, 0.1, 0.2)
+bricks = []
+
+
+def add_brick(xyz, rpy=(0, 0, 0)):
+    transform = build_frame(xyz, rpy)
+    scene.add_box(
+        'brick' + str(len(bricks)),
+        brick_size,
+        transform,
+        (1, 1, 0, 1)
+    )
+    bricks.append(transform)
+
+
+def add_bricks(count):
+    for x in range(-1, 2, 2):
+        for y in range(-2, 3, 1):
+            add_brick((0.5 * x, y * 0.4, brick_size[2]/2))
+            if len(bricks) >= count:
+                return
+    print(bricks)
+
+
+init('moveit_demo')
+
+scene = Scene()
+scene.add_box('ground', (5, 5, 0.1), build_frame((0, 0, -0.05)))
+
+add_bricks(10)
+
+arm = Arm()
 
 while True:
     local_test()
+    pass
 
