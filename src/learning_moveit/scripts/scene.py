@@ -74,14 +74,12 @@ class Scene:
             cur_is_known = name in self.interface.get_known_object_names()
 
             if (cur_is_attached == is_attached) and (cur_is_known == is_known):
-                rospy.loginfo('Added')
+                rospy.loginfo('Adding box to scene success.')
                 return True
 
             rospy.sleep(0.1)
             current = rospy.get_time()
-            rospy.loginfo('start=   ' + str(start))
-            rospy.loginfo('current= ' + str(current))
-            rospy.loginfo('Trying... ' + str(current - start))
+            # rospy.loginfo("Wait scene update [" + str(current - start) + "s]...")
 
-        rospy.loginfo('Failed')
+        rospy.loginfo('Adding box to scene failed')
         return False

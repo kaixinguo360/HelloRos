@@ -14,6 +14,8 @@ class Arm:
     end_link = ''
     wait = True
     cartesian = False
+    auto_commit = True
+    way_points = []
 
     def __init__(self, arm_name='arm', ref_frame='base_link'):
 
@@ -52,7 +54,38 @@ class Arm:
         self.cmd.set_named_target(name)
         self.cmd.go(wait=self.wait)
 
-    def to_transform(self, xyz, rpy=None, cartesian=None):
+    def commit(self):
+
+        fraction = 0.0  # 路径规划覆盖率
+        max_tries = 100  # 最大尝试次数
+        attempts = 0  # 已经尝试次数
+
+        while fraction < 1.0 and attempts < max_tries:
+            (plan, fraction) = self.cmd.compute_cartesian_path(
+                self.way_points,  # 路点列表
+                0.001,  # 步进值
+                0.0,  # 跳跃阈值
+                True  # 避障规划
+            )
+            attempts += 1
+            # if attempts % 10 == 0:
+            #     rospy.loginfo("Still trying after " +
+            #                   str(attempts) + " attempts... (" +
+            #                   str(fraction) + ")")
+        if fraction == 1.0:
+            # rospy.loginfo("Path computed successfully. Moving the arm.")
+            self.cmd.execute(plan)
+            # rospy.loginfo("Path execution")
+        else:
+            rospy.loginfo("Path planning failed with only " +
+                          str(fraction) + " success after " +
+                          str(max_tries) + " attempts. Give up Cartesian mode.")
+            for point in self.way_points:
+                self.to_transform(point, cartesian=False)
+
+        self.way_points = []
+
+    def to_transform(self, xyz, rpy=None, cartesian=None, auto_commit=None):
         pose = None
 
         if isinstance(xyz, Frame):
@@ -67,63 +100,49 @@ class Arm:
         if cartesian is None:
             cartesian = self.cartesian
 
-        self.cmd.set_start_state_to_current_state()
-        if cartesian:
-            way_points = [self.get_pose(), pose]
-            fraction = 0.0      # 路径规划覆盖率
-            max_tries = 100     # 最大尝试次数
-            attempts = 0        # 已经尝试次数
-            while fraction < 1.0 and attempts < max_tries:
-                (plan, fraction) = self.cmd.compute_cartesian_path(
-                    way_points,     # 路点列表
-                    0.001,          # 步进值
-                    0.0,            # 跳跃阈值
-                    True            # 避障规划
-                )
-                attempts += 1
-                # if attempts % 10 == 0:
-                #     rospy.loginfo("Still trying after " +
-                #                   str(attempts) + " attempts... (" +
-                #                   str(fraction) + ")")
-            if fraction == 1.0:
-                # rospy.loginfo("Path computed successfully. Moving the arm.")
-                self.cmd.execute(plan)
-                # rospy.loginfo("Path execution")
-            else:
-                rospy.loginfo("Path planning failed with only " +
-                              str(fraction) + " success after " +
-                              str(max_tries) + " attempts. Give up Cartesian mode.")
-                cartesian = False
+        if auto_commit is None:
+            auto_commit = self.auto_commit
 
-        if not cartesian:
+        if cartesian:
+            if len(self.way_points) == 0:
+                self.way_points.append(self.get_pose())
+            self.way_points.append(pose)
+            if auto_commit:
+                self.commit()
+        else:
+            self.cmd.set_start_state_to_current_state()
             self.cmd.set_pose_target(pose, self.end_link)
             plan = self.cmd.plan()
             self.cmd.execute(plan)
 
-    def to_translate(self, xyz, cartesian=None):
+    def to_translate(self, xyz, cartesian=None, auto_commit=None):
         cur = self.get_transform()
         cur.p = Vector(xyz[0], xyz[1], xyz[2])
-        self.to_transform(cur, cartesian=cartesian)
+        self.to_transform(cur, cartesian=cartesian, auto_commit=auto_commit)
 
-    def to_rotate(self, rpy, cartesian=None):
+    def to_rotate(self, rpy, cartesian=None, auto_commit=None):
         cur = self.get_transform()
         cur.M = Rotation.RPY(rpy[0], rpy[1], rpy[2])
-        self.to_transform(cur, cartesian=cartesian)
+        self.to_transform(cur, cartesian=cartesian, auto_commit=auto_commit)
 
     # ---- local transform ---- #
 
-    def local_transform(self, transform, cartesian=None):
-        self.to_transform(self.get_transform() * transform, cartesian=cartesian)
-    def local_translate(self, xyz, cartesian=None):
-        self.local_transform(Frame(Vector(xyz[0], xyz[1], xyz[2])), cartesian=cartesian)
-    def local_rotate(self, rpy, cartesian=None):
-        self.local_transform(Frame(Rotation.RPY(rpy[0], rpy[1], rpy[2])), cartesian=cartesian)
+    def local_transform(self, transform, cartesian=None, auto_commit=None):
+        self.to_transform(self.get_transform() * transform, cartesian=cartesian, auto_commit=auto_commit)
+
+    def local_translate(self, xyz, cartesian=None, auto_commit=None):
+        self.local_transform(Frame(Vector(xyz[0], xyz[1], xyz[2])), cartesian=cartesian, auto_commit=auto_commit)
+
+    def local_rotate(self, rpy, cartesian=None, auto_commit=None):
+        self.local_transform(Frame(Rotation.RPY(rpy[0], rpy[1], rpy[2])), cartesian=cartesian, auto_commit=auto_commit)
 
     # ---- global transform ---- #
 
-    def global_transform(self, transform, cartesian=None):
-        self.to_transform(transform * self.get_transform(), cartesian=cartesian)
-    def global_translate(self, xyz, cartesian=None):
-        self.global_transform(Frame(Vector(xyz[0], xyz[1], xyz[2])), cartesian=cartesian)
-    def global_rotate(self, rpy, cartesian=None):
-        self.global_transform(Frame(Rotation.RPY(rpy[0], rpy[1], rpy[2])), cartesian=cartesian)
+    def global_transform(self, transform, cartesian=None, auto_commit=None):
+        self.to_transform(transform * self.get_transform(), cartesian=cartesian, auto_commit=auto_commit)
+
+    def global_translate(self, xyz, cartesian=None, auto_commit=None):
+        self.global_transform(Frame(Vector(xyz[0], xyz[1], xyz[2])), cartesian=cartesian, auto_commit=auto_commit)
+
+    def global_rotate(self, rpy, cartesian=None, auto_commit=None):
+        self.global_transform(Frame(Rotation.RPY(rpy[0], rpy[1], rpy[2])), cartesian=cartesian, auto_commit=auto_commit)
