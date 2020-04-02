@@ -44,31 +44,31 @@ joint_limits:
     max_acceleration: 0
   motor_B_joint:
     has_velocity_limits: true
-    max_velocity: 3.14159265
+    max_velocity: 6
     has_acceleration_limits: false
     max_acceleration: 0
   motor_L_joint:
     has_velocity_limits: true
-    max_velocity: 3.14159265
+    max_velocity: 6
     has_acceleration_limits: false
     max_acceleration: 0
   motor_R_joint:
     has_velocity_limits: true
-    max_velocity: 3.14159265
+    max_velocity: 6
     has_acceleration_limits: false
     max_acceleration: 0
   motor_S_joint:
     has_velocity_limits: true
-    max_velocity: 3.14159265
+    max_velocity: 6
     has_acceleration_limits: false
     max_acceleration: 0
   motor_T_joint:
     has_velocity_limits: true
-    max_velocity: 3.14159265
+    max_velocity: 6
     has_acceleration_limits: false
     max_acceleration: 0
   motor_U_joint:
     has_velocity_limits: true
-    max_velocity: 3.14159265
+    max_velocity: 6
     has_acceleration_limits: false
     max_acceleration: 0

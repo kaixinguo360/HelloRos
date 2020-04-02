@@ -14,6 +14,7 @@ class Arm:
     end_link = ''
     wait = True
     cartesian = False
+    max_tries = 10
     auto_commit = True
     way_points = []
 
@@ -56,11 +57,11 @@ class Arm:
 
     def commit(self):
 
+        plan = None     # 规划的路径
         fraction = 0.0  # 路径规划覆盖率
-        max_tries = 100  # 最大尝试次数
-        attempts = 0  # 已经尝试次数
+        attempts = 0    # 已经尝试次数
 
-        while fraction < 1.0 and attempts < max_tries:
+        while fraction < 1.0 and attempts < self.max_tries:
             (plan, fraction) = self.cmd.compute_cartesian_path(
                 self.way_points,  # 路点列表
                 0.001,  # 步进值
@@ -79,7 +80,7 @@ class Arm:
         else:
             rospy.loginfo("Path planning failed with only " +
                           str(fraction) + " success after " +
-                          str(max_tries) + " attempts. Give up Cartesian mode.")
+                          str(self.max_tries) + " attempts. Give up Cartesian mode.")
             for point in self.way_points:
                 self.to_transform(point, cartesian=False)
 
