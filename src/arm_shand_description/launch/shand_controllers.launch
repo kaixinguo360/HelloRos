@@ -1,0 +1,12 @@
+<launch>
+    <!-- controllers of arm_body -->
+    <rosparam file="$(find arm_shand_description)/config/shand_controllers.yaml" command="load"/>
+    <node
+            pkg="controller_manager"
+            type="spawner"
+            name="shand_controllers_spawner"
+            args="finger1_joint_controller finger2_joint_controller"
+            respawn="false"
+            output="screen"
+    />
+</launch>

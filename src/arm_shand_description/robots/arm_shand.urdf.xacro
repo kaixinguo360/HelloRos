@@ -1,0 +1,7 @@
+<robot name="arm_robot" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:include filename="$(find arm_shand_description)/urdf/arm_shand_description.urdf.xacro"/>
+
+  <arm_shand/>
+
+</robot>

@@ -1,0 +1,93 @@
+<robot name="arm_shand" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:property name="finger_x" value="0.05"/>
+  <xacro:property name="finger_y" value="0.02"/>
+  <xacro:property name="finger_length" value="0.1"/>
+  <xacro:property name="finger_lower" value="${finger_y/2}"/>
+  <xacro:property name="finger_upper" value="${finger_y/2 + 0.06}"/>
+  <xacro:property name="finger_mass" value="1"/>
+
+  <xacro:include filename="$(find arm_description)/urdf/arm_description.urdf.xacro"/>
+
+  <xacro:macro name="prismatic" params="name parent child xyz rpy axis lower upper">
+    <joint name="${name}" type="prismatic">
+      <parent link="${parent}"/>
+      <child link="${child}"/>
+      <origin xyz="${xyz}" rpy="${rpy}"/>
+      <axis xyz="${axis}"/>
+      <limit effort="${motor_effort}" velocity="${motor_vel}" lower="${lower}" upper="${upper}"/>
+      <dynamics damping="0.0" friction="1"/>
+    </joint>
+    <transmission name="${name}_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="${name}">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="${name}_motor">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+    </transmission>
+  </xacro:macro>
+  <xacro:macro name="finger" params="name parent length xyz rpy">
+    <link name="${name}">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <box size="${finger_x} ${finger_y} ${length}"/>
+        </geometry>
+        <material name="white">
+          <color rgba="1 1 1 1"/>
+        </material>
+      </visual>
+      <collision>
+        <geometry>
+          <box size="${finger_x} ${finger_y} ${length}"/>
+        </geometry>
+      </collision>
+      <cylinder_inertial
+              radius="${finger_x/4+finger_y/4}"
+              length="${length}"
+              mass="${finger_mass}"
+      />
+    </link>
+    <prismatic
+            name="${name}_joint"
+            parent="${parent}"
+            child="${name}"
+            xyz="${xyz}"
+            rpy="${rpy}"
+            axis="0 1 0"
+            lower="${finger_lower}"
+            upper="${finger_upper}"
+    />
+    <gazebo reference="${name}">
+      <material>Gazebo/White</material>
+    </gazebo>
+  </xacro:macro>
+
+  <!-- simple hand -->
+
+  <xacro:macro name="arm_shand">
+
+    <arm/>
+
+    <!-- end effector -->
+    <finger
+            name="finger1"
+            parent="motor_T"
+            length="${finger_length}"
+            xyz="0 0 ${motor_height/2 + gap + finger_length/2}"
+            rpy="0 0 0"
+    />
+    <finger
+            name="finger2"
+            parent="motor_T"
+            length="${finger_length}"
+            xyz="0 0 ${motor_height/2 + gap + finger_length/2}"
+            rpy="0 0 3.1415926"
+    />
+
+  </xacro:macro>
+
+</robot>
