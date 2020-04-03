@@ -1,14 +1,14 @@
 <launch>
 
   <param name="robot_description"
-         command="$(find xacro)/xacro --inorder '$(find arm_bhand_description)/robots/arm_bhand_fixed.urdf.xacro'"/>
+         command="$(find xacro)/xacro --inorder '$(find arm_shand_description)/robots/arm_shand_fixed.urdf.xacro'"/>
 
   <!-- Load the controllers -->
-  <include file="$(find arm_bhand_description)/launch/moveit_controllers.launch"/>
+  <include file="$(find arm_shand_description)/launch/moveit_controllers.launch"/>
 
   <!-- common launch files -->
   <include file="$(find arm_common)/launch/moveit_common.launch">
-    <arg name="moveit_config" value="$(find arm_bhand_moveit_config)"/>
+    <arg name="moveit_config" value="$(find arm_shand_moveit_config)"/>
     <arg name="rviz" value="true"/>
   </include>
 
