@@ -5,7 +5,7 @@
             pkg="controller_manager"
             type="spawner"
             name="ros_controllers_spawner"
-            args="arm_controller finger1_controller finger2_controller"
+            args="arm_controller hand_controller"
             respawn="false"
             output="screen"
     />

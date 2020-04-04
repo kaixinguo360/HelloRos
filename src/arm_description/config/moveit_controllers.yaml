@@ -9,12 +9,12 @@ generic_hw_control_loop:
 # Settings for ros_control hardware interface
 hardware_interface:
   joints:
-    - motor_S_joint
-    - motor_L_joint
-    - motor_U_joint
-    - motor_R_joint
-    - motor_B_joint
-    - motor_T_joint
+    - shoulder_pan_joint
+    - shoulder_lift_joint
+    - elbow_joint
+    - wrist_1_joint
+    - wrist_2_joint
+    - wrist_3_joint
   sim_control_mode: 1  # 0: position, 1: velocity
 # Publish all joint states
 # Creates the /joint_states topic necessary in ROS
@@ -27,50 +27,50 @@ controller_list:
     default: True
     type: FollowJointTrajectory
     joints:
-      - motor_S_joint
-      - motor_L_joint
-      - motor_U_joint
-      - motor_R_joint
-      - motor_B_joint
-      - motor_T_joint
+      - shoulder_pan_joint
+      - shoulder_lift_joint
+      - elbow_joint
+      - wrist_1_joint
+      - wrist_2_joint
+      - wrist_3_joint
 
 
 arm_controller:
   type: position_controllers/JointTrajectoryController
   joints:
-    - motor_S_joint
-    - motor_L_joint
-    - motor_U_joint
-    - motor_R_joint
-    - motor_B_joint
-    - motor_T_joint
+    - shoulder_pan_joint
+    - shoulder_lift_joint
+    - elbow_joint
+    - wrist_1_joint
+    - wrist_2_joint
+    - wrist_3_joint
   gains:
-    motor_S_joint:
+    shoulder_pan_joint:
       p: 100
       d: 1
       i: 1
       i_clamp: 1
-    motor_L_joint:
+    shoulder_lift_joint:
       p: 100
       d: 1
       i: 1
       i_clamp: 1
-    motor_U_joint:
+    elbow_joint:
       p: 100
       d: 1
       i: 1
       i_clamp: 1
-    motor_R_joint:
+    wrist_1_joint:
       p: 100
       d: 1
       i: 1
       i_clamp: 1
-    motor_B_joint:
+    wrist_2_joint:
       p: 100
       d: 1
       i: 1
       i_clamp: 1
-    motor_T_joint:
+    wrist_3_joint:
       p: 100
       d: 1
       i: 1

@@ -5,8 +5,12 @@
             pkg="controller_manager"
             type="spawner"
             name="arm_controllers_spawner"
-            args="motor_S_joint_controller motor_L_joint_controller motor_U_joint_controller
-                  motor_R_joint_controller motor_B_joint_controller motor_T_joint_controller"
+            args="shoulder_pan_joint_controller
+                  shoulder_lift_joint_controller
+                  elbow_joint_controller
+                  wrist_1_joint_controller
+                  wrist_2_joint_controller
+                  wrist_3_joint_controller"
             respawn="false"
             output="screen"
     />

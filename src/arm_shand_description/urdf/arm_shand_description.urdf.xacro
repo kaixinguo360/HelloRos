@@ -1,11 +1,13 @@
 <robot name="arm_shand" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-  <xacro:property name="finger_x" value="0.05"/>
+  <xacro:property name="wrist_length" value="0.02"/>
+  <xacro:property name="palm_thick" value="0.02"/>
+  <xacro:property name="finger_x" value="0.08"/>
   <xacro:property name="finger_y" value="0.02"/>
   <xacro:property name="finger_length" value="0.1"/>
   <xacro:property name="finger_lower" value="${finger_y/2}"/>
-  <xacro:property name="finger_upper" value="${finger_y/2 + 0.06}"/>
-  <xacro:property name="finger_mass" value="1"/>
+  <xacro:property name="finger_upper" value="${finger_y/2 + 0.08}"/>
+  <xacro:property name="finger_mass" value="5"/>
 
   <xacro:include filename="$(find arm_description)/urdf/arm_description.urdf.xacro"/>
 
@@ -65,27 +67,73 @@
       <material>Gazebo/White</material>
     </gazebo>
   </xacro:macro>
+  <xacro:macro name="palm" params="name parent xyz rpy">
+    <link name="${name}">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <box size="${finger_x} ${finger_upper*2} ${palm_thick}"/>
+        </geometry>
+        <material name="white">
+          <color rgba="1 1 1 1"/>
+        </material>
+      </visual>
+      <collision>
+        <geometry>
+          <box size="${finger_x} ${finger_upper*2} ${palm_thick}"/>
+        </geometry>
+      </collision>
+      <cylinder_inertial
+              radius="${finger_x/4+(finger_upper*2)/4}"
+              length="${palm_thick}"
+              mass="${finger_mass}"
+      />
+    </link>
+    <fixed
+            name="${name}_joint"
+            parent="${parent}"
+            child="${name}"
+            xyz="${xyz}"
+            rpy="${rpy}"
+    />
+    <gazebo reference="${name}">
+      <material>Gazebo/White</material>
+    </gazebo>
+  </xacro:macro>
 
   <!-- simple hand -->
 
   <xacro:macro name="arm_shand">
 
     <arm/>
+    <pole
+            name="sh_wrist"
+            parent="wrist_link"
+            length="${wrist_length}"
+            xyz="0 0 ${wrist_length/2}"
+            rpy="0 0 0"
+    />
+    <palm
+            name="sh_palm"
+            parent="sh_wrist"
+            xyz="0 0 ${wrist_length/2 + palm_thick/2}"
+            rpy="0 0 0"
+    />
 
     <!-- end effector -->
     <finger
-            name="finger1"
-            parent="motor_T"
+            name="sh_finger1"
+            parent="sh_palm"
             length="${finger_length}"
-            xyz="0 0 ${motor_height/2 + gap + finger_length/2}"
-            rpy="0 0 0"
+            xyz="0 0 ${palm_thick/2 + gap + finger_length/2}"
+            rpy="0 0 3.1415926"
     />
     <finger
-            name="finger2"
-            parent="motor_T"
+            name="sh_finger2"
+            parent="sh_palm"
             length="${finger_length}"
-            xyz="0 0 ${motor_height/2 + gap + finger_length/2}"
-            rpy="0 0 3.1415926"
+            xyz="0 0 ${palm_thick/2 + gap + finger_length/2}"
+            rpy="0 0 0"
     />
 
   </xacro:macro>

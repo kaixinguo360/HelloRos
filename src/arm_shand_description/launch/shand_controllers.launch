@@ -5,7 +5,7 @@
             pkg="controller_manager"
             type="spawner"
             name="shand_controllers_spawner"
-            args="finger1_joint_controller finger2_joint_controller"
+            args="hand_controller"
             respawn="false"
             output="screen"
     />

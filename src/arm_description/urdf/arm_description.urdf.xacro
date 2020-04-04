@@ -6,7 +6,10 @@
 
     <plugin_ros_control/>
 
+    <!--    base_link    -->
     <link name="base_link"/>
+
+    <!--    shoulder    -->
     <base
             name="base"
             parent="base_link"
@@ -14,60 +17,74 @@
             rpy="0 0 0"
     />
     <motor
-            name="motor_S"
+            name="shoulder_pan"
             parent="base"
             xyz="0 0 ${base_height/2 + motor_height/2 + gap}"
             rpy="0 0 0"
     />
+
+    <!--    upper arm    -->
     <motor
-            name="motor_L"
-            parent="motor_S"
+            name="shoulder_lift"
+            parent="shoulder_pan"
             xyz="${motor_radius + motor_height/2 + gap} 0 0"
             rpy="0 ${pi/2} 0"
     />
     <pole
-            name="pole_1"
-            parent="motor_L"
+            name="upper_arm"
+            parent="shoulder_lift"
             length="${pole_length}"
             xyz="0 ${motor_radius + pole_length/2 + gap} 0"
             rpy="${pi/2} 0 0"
     />
     <motor
-            name="motor_U"
-            parent="pole_1"
+            name="elbow"
+            parent="upper_arm"
             xyz="0 0 -${pole_length/2 + motor_radius + gap}"
             rpy="-${pi/2} 0 0"
     />
-    <motor
-            name="motor_R"
-            parent="motor_U"
+
+    <!--    fore arm    -->
+    <pole
+            name="fore_arm_elbow"
+            parent="elbow"
+            length="${motor_height}"
             xyz="0 0 ${motor_height/2 + motor_radius + gap}"
             rpy="-${pi/2} 0 0"
     />
     <pole
-            name="pole_2"
-            parent="motor_R"
+            name="fore_arm"
+            parent="fore_arm_elbow"
             length="${pole_length}"
-            xyz="0 0 ${motor_height/2 + pole_length/2 + gap}"
+            xyz="0 0 ${pole_length/2 + motor_height/2 + gap}"
             rpy="0 0 0"
     />
+
+    <!--    wrist    -->
     <motor
-            name="motor_B"
-            parent="pole_2"
+            name="wrist_1"
+            parent="fore_arm"
             xyz="0 0 ${pole_length/2 + motor_radius + gap}"
             rpy="${pi/2} 0 0"
     />
     <motor
-            name="motor_T"
-            parent="motor_B"
+            name="wrist_2"
+            parent="wrist_1"
             xyz="0 0 ${motor_height/2 + motor_radius + gap}"
             rpy="-${pi/2} 0 0"
     />
+    <motor
+            name="wrist_3"
+            parent="wrist_2"
+            xyz="0 0 ${motor_height/2 + motor_radius + gap}"
+            rpy="${pi/2} 0 0"
+    />
 
+    <!--    wrist_link    -->
     <link name="wrist_link"/>
     <fixed
             name="wrist_joint"
-            parent="motor_T"
+            parent="wrist_3"
             child="wrist_link"
             xyz="0 0 ${motor_height/2 + gap}"
             rpy="0 0 0"

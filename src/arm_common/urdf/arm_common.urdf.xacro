@@ -158,8 +158,8 @@
       </collision>
       <cylinder_inertial
               radius="${pole_radius}"
-              length="${pole_length}"
-              mass="${pole_mass}"
+              length="${length}"
+              mass="${pole_mass*(length/pole_length)}"
       />
     </link>
     <fixed

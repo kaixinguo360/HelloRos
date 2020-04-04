@@ -1,36 +1,36 @@
-motor_S_joint_controller:
+shoulder_pan_joint_controller:
   type: position_controllers/JointPositionController
-  joint: motor_S_joint
+  joint: shoulder_pan_joint
   pid:
     p: 100.0
     d: 10.0
-motor_L_joint_controller:
+shoulder_lift_joint_controller:
   type: position_controllers/JointPositionController
-  joint: motor_L_joint
+  joint: shoulder_lift_joint
   pid:
     p: 100.0
     d: 10.0
-motor_U_joint_controller:
+elbow_joint_controller:
   type: position_controllers/JointPositionController
-  joint: motor_U_joint
+  joint: elbow_joint
   pid:
     p: 100.0
     d: 10.0
-motor_R_joint_controller:
+wrist_1_joint_controller:
   type: position_controllers/JointPositionController
-  joint: motor_R_joint
+  joint: wrist_1_joint
   pid:
     p: 100.0
     d: 10.0
-motor_B_joint_controller:
+wrist_2_joint_controller:
   type: position_controllers/JointPositionController
-  joint: motor_B_joint
+  joint: wrist_2_joint
   pid:
     p: 100.0
     d: 10.0
-motor_T_joint_controller:
+wrist_3_joint_controller:
   type: position_controllers/JointPositionController
-  joint: motor_T_joint
+  joint: wrist_3_joint
   pid:
     p: 100.0
     d: 10.0

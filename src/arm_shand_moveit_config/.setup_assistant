@@ -1,11 +1,11 @@
 moveit_setup_assistant_config:
   URDF:
-    package: arm_description
-    relative_path: robots/arm_fixed.urdf.xacro
+    package: arm_shand_description
+    relative_path: robots/arm_shand_fixed.urdf.xacro
     xacro_args: "--inorder "
   SRDF:
     relative_path: config/arm_robot.srdf
   CONFIG:
     author_name: Kaixinguo
     author_email: kaixinguo@kaixinguo.site
-    generated_timestamp: 1585970967
+    generated_timestamp: 1586006421
