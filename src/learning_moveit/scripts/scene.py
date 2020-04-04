@@ -10,12 +10,12 @@ from utils import frame_to_pose
 
 
 class Scene:
-    interface = None
-    publisher = None
-    ref_frame = ''
+    interface = None  # type: PlanningSceneInterface
+    publisher = None  # type: rospy.Publisher
+    ref_frame = ''  # type: str
 
-    colors = dict()
-    default_color = (0.75, 0.75, 0.75, 1)
+    colors = dict()  # type: dict
+    default_color = (0.75, 0.75, 0.75, 1)  # type: tuple
 
     def __init__(self, ref_frame='base_link'):
         self.interface = PlanningSceneInterface()

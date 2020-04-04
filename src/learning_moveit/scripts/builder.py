@@ -1,28 +1,28 @@
 #!/usr/bin/python2
 # coding=utf-8
 import json
-import rospy
 import rospkg
+from rospkg import RosPack
 
-from PyKDL import Frame, Vector, Rotation
-from geometry_msgs.msg import Pose
-from moveit_commander import MoveGroupCommander
+from PyKDL import Frame
 
-from utils import frame_to_pose, pose_to_frame, build_frame, pi
+from arm import Arm
+from scene import Scene
+from utils import build_frame, pi
 
 
 class Builder:
-    arm = None
-    scene = None
+    arm = None  # type: Arm
+    scene = None  # type: Scene
 
-    config = None
+    config = None  # type: list
 
-    brick_size = (0.4, 0.1, 0.2)
-    bricks = []
+    brick_size = (0.4, 0.1, 0.2)  # type: tuple
+    bricks = []  # type: list
 
-    base_offset = build_frame((0.1, 1, 0))
-    hand_offset = build_frame((0, 0, -0.2), (0, 0, pi / 2))
-    rp = rospkg.RosPack()
+    base_offset = build_frame((0.1, 1, 0))  # type: Frame
+    hand_offset = build_frame((0, 0, -0.16), (0, 0, 0))  # type: Frame
+    rp = rospkg.RosPack()  # type: RosPack
 
     def __init__(self, arm=None, scene=None):
         self.arm = arm
@@ -43,7 +43,7 @@ class Builder:
 
     def prepare_scene(self):
         self.reset_scene()
-        for y in range(2, -4, -1):
+        for y in range(1, -4, -1):
             for x in range(-1, 2, 2):
                 self.add_brick((0.5 * x, y * 0.3, self.brick_size[2] / 2))
                 if len(self.bricks) >= len(self.config):
@@ -75,18 +75,6 @@ class Builder:
             target = self.base_offset * build_frame(config['xyz'], config['rpy'])
             self.from_point_to_point(self.bricks[index], target, index)
 
-    # ---- pick & place ---- #
-
-    def pick(self, index):
-        assert isinstance(self.arm.cmd, MoveGroupCommander)
-        self.arm.cmd.attach_object('brick' + str(index), self.arm.end_link, [self.arm.end_link])
-        pass
-
-    def place(self, index):
-        assert isinstance(self.arm.cmd, MoveGroupCommander)
-        self.arm.cmd.detach_object('brick' + str(index))
-        pass
-
     # ---- utils ---- #
 
     def get_path(self):
@@ -107,21 +95,40 @@ class Builder:
 
     def from_point_to_point(self, frame1, frame2, index):
 
-        # pick
-        self.arm.to_transform(frame1 * build_frame((0, 0, -0.2)) * self.hand_offset, cartesian=False)
-        self.arm.to_transform(frame1 * self.hand_offset)
-        rospy.sleep(1)
-        self.pick(index)
-        self.arm.to_transform(frame1 * build_frame((0, 0, -0.2)) * self.hand_offset)
+        self.arm.pick(
+            'brick' + str(index),
+            frame1 * self.hand_offset,
+            self.arm.GripperTranslation((0, 0, -1), 0.2, 0.1),
+            self.arm.GripperTranslation((0, 0, 1), 0.2, 0.1),
+            self.arm.GripperTranslation((0, 0, 1), 0.2, 0.1),
+            0.09,
+            (self.brick_size[1] + 0.02) / 2,
+            2
+        )
 
-        # xxx
-        self.arm.to_transform(build_frame((0, 0.6, 0.4), frame2.M.GetRPY()) * self.hand_offset, cartesian=False)
-        self.arm.global_translate((0, 0, 0.4))
+        self.arm.place(
+            'brick' + str(index),
+            frame2
+        )
 
-        # place
-        self.arm.to_transform(build_frame((0, -0.2, 0.2)) * frame2 * self.hand_offset, auto_commit=False)
-        self.arm.to_transform(build_frame((0, 0, 0.2)) * frame2 * self.hand_offset, auto_commit=False)
-        self.arm.to_transform(frame2 * self.hand_offset)
-        rospy.sleep(1)
-        self.place(index)
-        self.arm.to_transform(frame2 * build_frame((0, 0, -0.4)) * self.hand_offset)
+        # self.arm.pick('brick' + str(index), frame1 * self.hand_offset)
+        # # pick
+        # self.arm.to_transform(frame1 * build_frame((0, 0, -0.2)) * self.hand_offset, cartesian=False)
+        # self.arm.to_transform(frame1 * self.hand_offset)
+        # rospy.sleep(1)
+        # self.arm.pick('brick' + str(index), frame1 * self.hand_offset)
+        # self.close()
+        # rospy.sleep(1)
+        # self.arm.to_transform(frame1 * build_frame((0, 0, -0.2)) * self.hand_offset)
+        #
+        # # xxx
+        # self.arm.to_transform(build_frame((0, 0.6, 0.4), frame2.M.GetRPY()) * self.hand_offset, cartesian=False)
+        #
+        # # place
+        # self.arm.to_transform(build_frame((0, -0.2, 0.2)) * frame2 * self.hand_offset, auto_commit=False)
+        # self.arm.to_transform(build_frame((0, 0, 0.2)) * frame2 * self.hand_offset, auto_commit=False)
+        # self.arm.to_transform(frame2 * self.hand_offset)
+        # rospy.sleep(1)
+        # self.open()
+        # self.place(index, frame2)
+        # self.arm.global_translate((0, 0, -0.2))

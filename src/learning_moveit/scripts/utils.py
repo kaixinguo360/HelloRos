@@ -5,7 +5,8 @@ import rospy
 import moveit_commander
 
 from PyKDL import Frame, Vector, Rotation
-from geometry_msgs.msg import PoseStamped, Pose, Point, Quaternion
+from geometry_msgs.msg import PoseStamped, Pose, Vector3Stamped
+from moveit_msgs.msg import GripperTranslation
 
 pi = 3.1415926
 
@@ -23,6 +24,7 @@ def init(node_name):
 
 
 def frame_to_pose(frame):
+    # type: (Frame) -> Pose
     assert isinstance(frame, Frame)
     pose = Pose()
 
@@ -43,6 +45,7 @@ def frame_to_pose(frame):
 
 
 def pose_to_frame(pose):
+    # type: (object) -> Frame
     if isinstance(pose, PoseStamped):
         pose = pose.pose
     assert isinstance(pose, Pose)
@@ -66,6 +69,8 @@ def pose_to_frame(pose):
 
 
 def build_frame(xyz, rpy=(0, 0, 0)):
+    # type: (tuple, tuple) -> Frame
     pos = Vector(xyz[0], xyz[1], xyz[2])
     rot = Rotation.RPY(rpy[0], rpy[1], rpy[2])
     return Frame(rot, pos)
+

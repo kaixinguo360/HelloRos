@@ -1,0 +1,11 @@
+<launch>
+
+  <node
+          pkg="learning_moveit"
+          type="pick_demo.py"
+          name="learning_moveit_demo"
+          required="true"
+          output="screen"
+  />
+
+</launch>
