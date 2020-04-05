@@ -8,6 +8,9 @@
   <xacro:property name="finger_lower" value="${finger_y/2}"/>
   <xacro:property name="finger_upper" value="${finger_y/2 + 0.08}"/>
   <xacro:property name="finger_mass" value="5"/>
+  <xacro:property name="finger_effort" value="500.0"/>
+  <xacro:property name="finger_vel" value="${pi}"/>
+
 
   <xacro:include filename="$(find arm_description)/urdf/arm_description.urdf.xacro"/>
 
@@ -17,8 +20,8 @@
       <child link="${child}"/>
       <origin xyz="${xyz}" rpy="${rpy}"/>
       <axis xyz="${axis}"/>
-      <limit effort="${motor_effort}" velocity="${motor_vel}" lower="${lower}" upper="${upper}"/>
-      <dynamics damping="0.0" friction="1"/>
+      <limit effort="${finger_effort}" velocity="${finger_vel}" lower="${lower}" upper="${upper}"/>
+      <dynamics damping="0.0" friction="0.0"/>
     </joint>
     <transmission name="${name}_trans">
       <type>transmission_interface/SimpleTransmission</type>

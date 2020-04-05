@@ -98,17 +98,19 @@ class Builder:
         self.arm.pick(
             'brick' + str(index),
             frame1 * self.hand_offset,
-            self.arm.GripperTranslation((0, 0, -1), 0.2, 0.1),
-            self.arm.GripperTranslation((0, 0, 1), 0.2, 0.1),
-            self.arm.GripperTranslation((0, 0, 1), 0.2, 0.1),
+            self.arm.GripperTranslation((0, 0, -1), 0.1, 0.05),
+            self.arm.GripperTranslation((0, 0, 1), 0.1, 0.05),
+            self.arm.GripperTranslation((0, 0, 1), 0.1, 0.05),
             0.09,
-            (self.brick_size[1] + 0.02) / 2,
-            2
+            0.06,
         )
 
         self.arm.place(
             'brick' + str(index),
-            frame2
+            frame2,
+            self.arm.GripperTranslation((0, 0, -1), 0.1, 0.05),
+            self.arm.GripperTranslation((0, 1, 0), 0.1, 0.05),
+            0.09
         )
 
         # self.arm.pick('brick' + str(index), frame1 * self.hand_offset)

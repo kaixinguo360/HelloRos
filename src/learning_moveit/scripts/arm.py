@@ -8,7 +8,7 @@ import rospy
 from PyKDL import Frame, Vector, Rotation
 from genpy import Duration
 from geometry_msgs.msg import Pose, PoseStamped
-from moveit_msgs.msg import Grasp, GripperTranslation, MoveItErrorCodes
+from moveit_msgs.msg import Grasp, GripperTranslation, MoveItErrorCodes, PlaceLocation
 from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
 
 from utils import frame_to_pose, pose_to_frame, build_frame
@@ -26,9 +26,12 @@ class Arm:
     max_tries = 10  # type: int
     auto_commit = True  # type: bool
 
+    open_posture = None
+    close_posture = None
+
     hand_offset = build_frame((0, 0, -0.3), (0, 0, 0))  # type: Frame
 
-    def __init__(self, arm_name='arm', hand_name='hand', ref_frame='base_link'):
+    def __init__(self, arm_name='arm', ref_frame='base_link'):
 
         # 初始化属性
         self.cmd = moveit_commander.MoveGroupCommander(arm_name)  # 获取MoveGroupCommander
@@ -40,6 +43,9 @@ class Arm:
         self.cmd.allow_replanning(True)  # 允许重新规划 (5次)
         self.cmd.set_goal_position_tolerance(0.01)  # 位移允许误差
         self.cmd.set_goal_orientation_tolerance(0.05)  # 旋转允许误差
+
+        self.open_posture = self.JointTrajectory(0.09, 0.5)
+        self.close_posture = self.JointTrajectory(0.06, 0.5)
 
     def destroy(self):
         # 关闭节点
@@ -71,8 +77,8 @@ class Arm:
             post_place_retreat=None,
             open_grasp_posture=0.09,
             close_grasp_posture=0.06,
-            grasp_timeout=2,
-            max_attempts=20
+            grasp_timeout=0.5,
+            max_attempts=10
     ):
         g = Grasp()
         g.id = target_name + '_pick_grasp'
@@ -82,8 +88,8 @@ class Arm:
         g.grasp_pose.pose = frame_to_pose(target_transform)
 
         # 夹持器张开和闭合的姿态
-        g.pre_grasp_posture = self.JointTrajectory(close_grasp_posture, open_grasp_posture, grasp_timeout)
-        g.grasp_posture = self.JointTrajectory(open_grasp_posture, close_grasp_posture, grasp_timeout)
+        g.pre_grasp_posture = self.open_posture
+        g.grasp_posture = self.close_posture
 
         # 接近与撤离目标的参数
         g.pre_grasp_approach = pre_grasp_approach
@@ -95,29 +101,51 @@ class Arm:
         g.max_contact_force = 100
         g.allowed_touch_objects = [target_name]
 
+        # self.cmd.set_support_surface_name('ground')
+
         result = False
         attempts = 0
         while result != MoveItErrorCodes.SUCCESS and attempts < max_attempts:
             result = self.cmd.pick(target_name, g)
+            rospy.sleep(0.01)
             attempts += 1
 
     def place(
             self,
             target_name,
             target_transform,
-            max_attempts=20
+            pre_place_approach,
+            post_place_retreat,
+            open_place_posture=0.09,
+            place_timeout=0.5,
+            max_attempts=10
     ):
-        # 抓取时的姿态
-        location = PoseStamped()
-        location.header.frame_id = self.ref_frame
-        location.pose = frame_to_pose(target_transform)
+        p = PlaceLocation()
+
+        p.id = target_name + '_place_grasp'
+
+        # 放置时的姿态
+        p.place_pose.header.frame_id = self.ref_frame
+        p.place_pose.pose = frame_to_pose(target_transform)
+
+        # 夹持器张开的姿态
+        p.post_place_posture = self.JointTrajectory(open_place_posture, place_timeout)
+
+        # 接近与撤离目标的参数
+        p.pre_place_approach = pre_place_approach
+        p.post_place_retreat = post_place_retreat
+
+        # 其他参数
+        p.allowed_touch_objects = [target_name]
+
+        # self.cmd.set_support_surface_name('ground')
 
         result = False
         attempts = 0
         while result != MoveItErrorCodes.SUCCESS and attempts < max_attempts:
-            result = self.cmd.place(target_name, location)
+            result = self.cmd.place(target_name, p)
+            rospy.sleep(0.01)
             attempts += 1
-
     # ---- absolute transform ---- #
 
     def to_target(self, name):
@@ -230,24 +258,19 @@ class Arm:
         translation.min_distance = min_distance
         return translation
 
-    def JointTrajectory(self, begin, end, time=2):
-        # type: (float, float, float) -> JointTrajectory
+    def JointTrajectory(self, position, time=0.5):
+        # type: (float, float) -> JointTrajectory
 
         trajectory = JointTrajectory()
         trajectory.header.frame_id = self.ref_frame
         trajectory.joint_names = ['sh_finger1_joint', 'sh_finger2_joint']
 
-        size = 2
-        for index in range(1, size + 1, 1):
-            rate = index / (size + 0.0)
-            position = begin + (end - begin) * rate
-            time_from_start = time * rate
+        point = JointTrajectoryPoint()
+        point.positions = [position, position]
+        point.velocities = [0, 0]
+        point.time_from_start = Duration.from_sec(time)
 
-            point = JointTrajectoryPoint()
-            point.positions = [position, position]
-            point.time_from_start = Duration.from_sec(time_from_start)
-
-            trajectory.points.append(point)
+        trajectory.points = [point]
 
         # print(trajectory)
         return trajectory

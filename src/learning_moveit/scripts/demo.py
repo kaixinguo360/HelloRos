@@ -14,9 +14,9 @@ arm = Arm()
 arm.cartesian = True
 
 builder = Builder(arm, scene)
-builder.load_from_path(builder.get_path() + '/config/demo.json')
-builder.show_target()
-rospy.sleep(5)
+builder.load_from_path(builder.get_path() + '/config/simple.json')
+# builder.show_target()
+# rospy.sleep(5)
 builder.prepare_scene()
 builder.build()
 

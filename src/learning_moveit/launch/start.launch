@@ -2,6 +2,8 @@
 
   <param name="robot_description"
          command="$(find xacro)/xacro --inorder '$(find arm_shand_description)/robots/arm_shand_fixed.urdf.xacro'"/>
+<!--  <param name="move_group/trajectory_execution/allowed_execution_duration_scaling" value="4.0" />-->
+<!--  <param name="move_group/trajectory_execution/execution_duration_monitoring" value="false" />-->
 
   <!-- Load the controllers -->
   <include file="$(find arm_shand_description)/launch/moveit_controllers.launch"/>
